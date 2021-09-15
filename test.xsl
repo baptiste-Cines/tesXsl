@@ -4079,8 +4079,6 @@
     </xsl:param>
     <xsl:if test="$protocol-url != ''">
        <dct:conformsTo rdf:resource="{$protocol-url}"/>
-        <dct:Standard rdf:about="{$protocol-url}"/>
-      </dct:conformsTo>
     </xsl:if>
   </xsl:template>
 
