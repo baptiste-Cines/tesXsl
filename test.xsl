@@ -1958,9 +1958,9 @@
         </geodcatap:originator>
       </xsl:when>
       <xsl:when test="$role = 'pointOfContact' and ($ResourceType != 'service' or $profile = $extended)">
-        <dcat:contactPoint>
-          <xsl:copy-of select="$ResponsibleParty"/>
-        </dcat:contactPoint>
+       <xsl:for-each select="gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString">
+        <dcat:contactPoint   rdf:resource="mailto:{.}" />
+      </xsl:for-each>
       </xsl:when>
 <!--
       <xsl:when test="$role = 'pointOfContact' and $ResourceType != 'service'">
