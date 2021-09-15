@@ -138,7 +138,7 @@
 
 -->
 
-<xsl:param name="catalogId" select=""/>
+
 
 <!-- Uncomment to use GeoDCAT-AP Core as default profile -->
 <!--
