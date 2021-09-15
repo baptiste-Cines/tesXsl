@@ -1058,14 +1058,13 @@
                 <dct:conformsTo rdf:resource="{$selected-profile}"/>
               </xsl:when>
               <xsl:when test="$MetadataStandardName != ''">
-                <dct:conformsTo rdf:parseType="Resource">
-                  <rdf:type rdf:resource="{$dct}Standard"/>
+                <dct:conformsTo rdf:resource="{$dct}Standard"/>
+                  
 <!-- Metadata standard name -->
 <!--
                   <dct:title xml:lang="{$MetadataLanguage}"><xsl:value-of select="$MetadataStandardName"/></dct:title>
 -->
-                  
-                </dct:conformsTo>
+               
               </xsl:when>
             </xsl:choose>
           </dct:source>
@@ -2282,9 +2281,8 @@
     <xsl:if test="../../gmd:pass/gco:Boolean = 'true'">
       <xsl:choose>
         <xsl:when test="$specUri != ''">
-          <dct:conformsTo>
-            <dct:Standard rdf:about="{$specUri}"/>
-          </dct:conformsTo>
+          <dct:conformsTo rdf:resource="{$specUri}"/>
+            
 <!--
           <dct:conformsTo>
             <rdf:Description rdf:about="{$specUri}">
@@ -2294,9 +2292,7 @@
 -->
         </xsl:when>
         <xsl:when test="../@xlink:href and ../@xlink:href != ''">
-          <dct:conformsTo>
-            <dct:Standard rdf:about="{../@xlink:href}"/>
-          </dct:conformsTo>
+          <dct:conformsTo rdf:resource="{../@xlink:href}"/>
 <!--
           <dct:conformsTo>
             <rdf:Description rdf:about="{../@xlink:href}">
@@ -2306,10 +2302,8 @@
 -->
         </xsl:when>
         <xsl:otherwise>
-          <dct:conformsTo rdf:parseType="Resource">
-            <rdf:type rdf:resource="{$dct}Standard"/>
-            <xsl:copy-of select="$specinfo"/>
-          </dct:conformsTo>
+          <dct:conformsTo rdf:resource="{$dct}Standard"/>
+           
         </xsl:otherwise>
       </xsl:choose>
     </xsl:if>
@@ -3817,20 +3811,11 @@
 
     <xsl:choose>
       <xsl:when test="starts-with($link, 'http://') or starts-with($link, 'https://')">
-        <dct:conformsTo>
-          <rdf:Description rdf:about="{$link}">
-            <rdf:type rdf:resource="{$dct}Standard"/>
-            <dct:type rdf:resource="{$INSPIREGlossaryUri}SpatialReferenceSystem"/>
-          </rdf:Description>
-        </dct:conformsTo>
+        <dct:conformsTo rdf:resource="{$link}"/>
+          
       </xsl:when>
       <xsl:when test="starts-with($code, 'http://') or starts-with($code, 'https://')">
-        <dct:conformsTo>
-          <rdf:Description rdf:about="{$code}">
-            <rdf:type rdf:resource="{$dct}Standard"/>
-            <dct:type rdf:resource="{$INSPIREGlossaryUri}SpatialReferenceSystem"/>
-          </rdf:Description>
-        </dct:conformsTo>
+        <dct:conformsTo rdf:resource="{$code}"/>
       </xsl:when>
       <xsl:when test="starts-with($code, 'urn:')">
         <xsl:variable name="srid">
@@ -3841,130 +3826,27 @@
         <xsl:variable name="sridVersion" select="substring-before(substring-after(substring-after(substring-after(substring-after(substring-after($code,':'),':'),':'),':'),':'),':')"/>
         <xsl:choose>
           <xsl:when test="$srid != '' and string(number($srid)) != 'NaN'">
-            <dct:conformsTo>
-              <rdf:Description rdf:about="{$EpsgSrsBaseUri}/{$srid}">
-                <rdf:type rdf:resource="{$dct}Standard"/>
-                <rdf:type rdf:resource="{$skos}Concept"/>
-                <dct:type rdf:resource="{$INSPIREGlossaryUri}SpatialReferenceSystem"/>
-                <dct:identifier rdf:datatype="{$xsd}anyURI"><xsl:value-of select="$code"/></dct:identifier>
-                <skos:notation rdf:datatype="{$xsd}anyURI"><xsl:value-of select="$code"/></skos:notation>
-                <skos:inScheme>
-                  <skos:ConceptScheme rdf:about="{$EpsgSrsBaseUri}">
-                    <dct:title xml:lang="en">
-                      <xsl:value-of select="$EpsgSrsName"/>
-                    </dct:title>
-                  </skos:ConceptScheme>
-                </skos:inScheme>
-    <xsl:copy-of select="$version-statement"/>
-              </rdf:Description>
-            </dct:conformsTo>
+            <dct:conformsTo rdf:resource="{$EpsgSrsBaseUri}/{$srid}"/>
+              
           </xsl:when>
           <xsl:otherwise>
-            <dct:conformsTo rdf:parseType="Resource">
-              <rdf:type rdf:resource="{$dct}Standard"/>
-              <dct:type rdf:resource="{$INSPIREGlossaryUri}SpatialReferenceSystem"/>
-              <dct:identifier rdf:datatype="{$xsd}anyURI"><xsl:value-of select="$code"/></dct:identifier>
-              <xsl:if test="$codespace != ''">
-                <rdf:type rdf:resource="{$skos}Concept"/>
-                <skos:notation rdf:datatype="{$xsd}anyURI"><xsl:value-of select="$code"/></skos:notation>
-                <skos:inScheme>
-                  <skos:ConceptScheme>
-                    <dct:title xml:lang="{$MetadataLanguage}">
-                      <xsl:value-of select="$codespace"/>
-                    </dct:title>
-                  </skos:ConceptScheme>
-                </skos:inScheme>
-              </xsl:if>
-              <xsl:copy-of select="$version-statement"/>
-            </dct:conformsTo>
+            <dct:conformsTo rdf:resource="{$INSPIREGlossaryUri}SpatialReferenceSystem"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
         <xsl:choose>
           <xsl:when test="$code = number($code) and (translate($codespace,$uppercase,$lowercase) = 'epsg' or starts-with(translate($codespace,$uppercase,$lowercase),translate($EpsgSrsBaseUrn,$uppercase,$lowercase)))">
-            <dct:conformsTo>
-              <rdf:Description rdf:about="{$EpsgSrsBaseUri}/{$code}">
-                <rdf:type rdf:resource="{$dct}Standard"/>
-                <rdf:type rdf:resource="{$skos}Concept"/>
-                <dct:type rdf:resource="{$INSPIREGlossaryUri}SpatialReferenceSystem"/>
-                <dct:identifier rdf:datatype="{$xsd}anyURI"><xsl:value-of select="concat($EpsgSrsBaseUrn,':',$version,':',$code)"/></dct:identifier>
-                <skos:notation rdf:datatype="{$xsd}anyURI"><xsl:value-of select="concat($EpsgSrsBaseUrn,':',$version,':',$code)"/></skos:notation>
-                <skos:inScheme>
-                  <skos:ConceptScheme rdf:about="{$EpsgSrsBaseUri}">
-                    <dct:title xml:lang="en">
-                      <xsl:value-of select="$EpsgSrsName"/>
-                    </dct:title>
-                  </skos:ConceptScheme>
-                </skos:inScheme>
-                <xsl:copy-of select="$version-statement"/>
-              </rdf:Description>
-            </dct:conformsTo>
+            <dct:conformsTo rdf:resource="{$EpsgSrsBaseUri}/{$code}"/>
           </xsl:when>
           <xsl:when test="translate(normalize-space(translate($code,$uppercase,$lowercase)),': ','') = 'etrs89'">
-            <dct:conformsTo>
-              <rdf:Description rdf:about="{$Etrs89Uri}">
-                <rdf:type rdf:resource="{$dct}Standard"/>
-                <rdf:type rdf:resource="{$skos}Concept"/>
-                <dct:type rdf:resource="{$INSPIREGlossaryUri}SpatialReferenceSystem"/>
-                <dct:identifier rdf:datatype="{$xsd}anyURI"><xsl:value-of select="$Etrs89Urn"/></dct:identifier>
-                <skos:notation rdf:datatype="{$xsd}anyURI"><xsl:value-of select="$Etrs89Urn"/></skos:notation>
-                <dct:title xml:lang="en">ETRS89 - European Terrestrial Reference System 1989</dct:title>
-                <skos:prefLabel xml:lang="en">ETRS89 - European Terrestrial Reference System 1989</skos:prefLabel>
-                <skos:inScheme>
-                  <skos:ConceptScheme rdf:about="{$EpsgSrsBaseUri}">
-                    <dct:title xml:lang="en">
-                      <xsl:value-of select="$EpsgSrsName"/>
-                    </dct:title>
-                  </skos:ConceptScheme>
-                </skos:inScheme>
-                <xsl:copy-of select="$version-statement"/>
-              </rdf:Description>
-            </dct:conformsTo>
+            <dct:conformsTo rdf:resource="{$Etrs89Uri}"/>
           </xsl:when>
           <xsl:when test="translate(normalize-space(translate($code,$uppercase,$lowercase)),': ','') = 'crs84'">
-            <dct:conformsTo>
-              <rdf:Description rdf:about="{$Crs84Uri}">
-                <rdf:type rdf:resource="{$dct}Standard"/>
-                <rdf:type rdf:resource="{$skos}Concept"/>
-                <dct:type rdf:resource="{$INSPIREGlossaryUri}SpatialReferenceSystem"/>
-                <dct:identifier rdf:datatype="{$xsd}anyURI"><xsl:value-of select="$Crs84Urn"/></dct:identifier>
-                <skos:notation rdf:datatype="{$xsd}anyURI"><xsl:value-of select="$Crs84Urn"/></skos:notation>
-                <dct:title xml:lang="en">CRS84</dct:title>
-                <skos:prefLabel xml:lang="en">CRS84</skos:prefLabel>
-                <skos:inScheme>
-                  <skos:ConceptScheme rdf:about="{$OgcSrsBaseUri}">
-                    <dct:title xml:lang="en">
-                      <xsl:value-of select="$OgcSrsName"/>
-                    </dct:title>
-                  </skos:ConceptScheme>
-                </skos:inScheme>
-                <xsl:copy-of select="$version-statement"/>
-              </rdf:Description>
-            </dct:conformsTo>
+           <dct:conformsTo rdf:resource="{$Crs84Uri}"/>
           </xsl:when>
           <xsl:otherwise>
-            <dct:conformsTo rdf:parseType="Resource">
-              <rdf:type rdf:resource="{$dct}Standard"/>
-              <rdf:type rdf:resource="{$skos}Concept"/>
-              <dct:type rdf:resource="{$INSPIREGlossaryUri}SpatialReferenceSystem"/>
-              <dct:title xml:lang="{$MetadataLanguage}">
-                <xsl:value-of select="$code"/>
-              </dct:title>
-              <xsl:if test="$codespace != ''">
-                <skos:prefLabel xml:lang="{$MetadataLanguage}">
-                  <xsl:value-of select="$code"/>
-                </skos:prefLabel>
-                <skos:inScheme>
-                  <skos:ConceptScheme>
-                    <dct:title xml:lang="{$MetadataLanguage}">
-                      <xsl:value-of select="$codespace"/>
-                    </dct:title>
-                  </skos:ConceptScheme>
-                </skos:inScheme>
-              </xsl:if>
-              <xsl:copy-of select="$version-statement"/>
-            </dct:conformsTo>
+            <dct:conformsTo rdf:resource="{$INSPIREGlossaryUri}SpatialReferenceSystem}"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
@@ -4196,7 +4078,7 @@
       </xsl:call-template>
     </xsl:param>
     <xsl:if test="$protocol-url != ''">
-      <dct:conformsTo>
+       <dct:conformsTo rdf:resource="{$protocol-url}"/>
         <dct:Standard rdf:about="{$protocol-url}"/>
       </dct:conformsTo>
     </xsl:if>
