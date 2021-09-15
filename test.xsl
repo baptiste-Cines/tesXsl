@@ -138,6 +138,8 @@
 
 -->
 
+<xsl:param name="catalogId" select="">
+
 <!-- Uncomment to use GeoDCAT-AP Core as default profile -->
 <!--
   <xsl:variable name="default-profile" select="$profile-core-uri"/>
@@ -1138,6 +1140,7 @@
 <!--
       </xsl:if>
 -->
+    <dct:isPartOf rdf:resource="https://f2ds.eosc-pillar.eu/catalog/{$catalogId}"/>
     <xsl:copy-of select="$ResourceVersion"/>
 <!--
       <dct:title xml:lang="{$MetadataLanguage}"><xsl:value-of select="$ResourceTitle"/></dct:title>
