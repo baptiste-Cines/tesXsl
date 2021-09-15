@@ -3846,7 +3846,7 @@
            <dct:conformsTo rdf:resource="{$Crs84Uri}"/>
           </xsl:when>
           <xsl:otherwise>
-            <dct:conformsTo rdf:resource="{$INSPIREGlossaryUri}SpatialReferenceSystem}"/>
+            <dct:conformsTo rdf:resource="{{$INSPIREGlossaryUri}SpatialReferenceSystem}"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
