@@ -1,55 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
 
-  Copyright 2015-2021 EUROPEAN UNION
-  Licensed under the EUPL, Version 1.2 or - as soon they will be approved by
-  the European Commission - subsequent versions of the EUPL (the "Licence");
-  You may not use this work except in compliance with the Licence.
-  You may obtain a copy of the Licence at:
 
-  https://joinup.ec.europa.eu/collection/eupl
 
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the Licence is distributed on an "AS IS" basis,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the Licence for the specific language governing permissions and
-  limitations under the Licence.
-
-  Contributors: ISA GeoDCAT-AP Working Group (https://github.com/SEMICeu/geodcat-ap)
-
-  This work was originally supported by the EU Interoperability Solutions for
-  European Public Administrations Programme (http://ec.europa.eu/isa)
-  through Action 1.17: Re-usable INSPIRE Reference Platform
-  (http://ec.europa.eu/isa/actions/01-trusted-information-exchange/1-17action_en.htm).
-
-  Source code:  https://github.com/SEMICeu/iso-19139-to-dcat-ap
-
--->
-
-<!--
-
-  PURPOSE AND USAGE
-
-  This XSLT is a proof of concept for the implementation of the latest version
-  of the geospatial profile of DCAT-AP (GeoDCAT-AP):
-
-    https://semiceu.github.io/GeoDCAT-AP/releases/
-
-  As such, this XSLT must be considered as unstable, and can be updated any
-  time based on the revisions to the GeoDCAT-AP specifications and
-  related work in the framework of INSPIRE and the EU ISA² Programme.
-
-  The official distributions of this XSLT are published in the dedicated GitHub
-  repository:
-  
-    https://github.com/SEMICeu/iso-19139-to-dcat-ap
-
-  Comments and inquiries should be sent via the corresponding issue tracker: 
-
-    https://github.com/SEMICeu/iso-19139-to-dcat-ap/issues
-
--->
 
 <xsl:transform
     xmlns:adms   = "http://www.w3.org/ns/adms#"
@@ -205,9 +158,6 @@
 <!--
   <xsl:param name="include-deprecated">no</xsl:param>
 -->
-  
-<!-- param $catalogId -->
-  <xsl:param name="catalogId"></xsl:param>
 
 <!-- Parameter $CoupledResourceLookUp -->
 <!--
@@ -260,6 +210,7 @@
   <xsl:param name="OgcSrsBaseUri">http://www.opengis.net/def/crs/OGC</xsl:param>
   <xsl:param name="OgcSrsBaseUrn">urn:ogc:def:crs:OGC</xsl:param>
   <xsl:param name="OgcSrsName">OGC Coordinate Reference Systems</xsl:param>
+  <xsl:param name="catalogId"></xsl:param>
 
 <!-- URI and URN for CRS84. -->
 
@@ -348,7 +299,9 @@
 
   <xsl:param name="iana-mt" select="concat($iana,'media-types/')"/>
 
-
+<!-- DEPRECATED: Parameter kept for backward compatibility with GeoDCAT-AP v1.* -->
+<!-- This is used as the datatype for the GeoJSON-based encoding of the bounding box. -->
+  <xsl:param name="geojsonMediaTypeUri" select="concat($iana-mt,'application/vnd.geo+json')"/>
 
 <!-- QUDT Units Vocabulary -->
   <xsl:param name="qudt-unit">http://www.qudt.org/vocab/unit</xsl:param>
