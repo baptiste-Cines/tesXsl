@@ -345,9 +345,7 @@
 
   <xsl:param name="iana-mt" select="concat($iana,'media-types/')"/>
 
-<!-- DEPRECATED: Parameter kept for backward compatibility with GeoDCAT-AP v1.* -->
-<!-- This is used as the datatype for the GeoJSON-based encoding of the bounding box. -->
-  <xsl:param name="geojsonMediaTypeUri">https://www.iana.org/assignments/media-types/application/vnd.geo+json</xsl:param>
+
 
 <!-- QUDT Units Vocabulary -->
   <xsl:param name="qudt-unit">http://www.qudt.org/vocab/unit</xsl:param>
