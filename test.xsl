@@ -206,9 +206,9 @@
   <xsl:param name="include-deprecated">no</xsl:param>
 -->
   
-<!--
+<!-- param $catalogId -->
   <xsl:param name="catalogId"></xsl:param>
--->
+
 <!-- Parameter $CoupledResourceLookUp -->
 <!--
 
