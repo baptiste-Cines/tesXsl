@@ -2086,7 +2086,7 @@
       </xsl:if>
       <xsl:if test="$relation = 'hasmetadata'">
         <rdf:type rdf:resource="{$dcat}CatalogRecord"/>
-	<xsl:if test="$cheme != '' or $schemeURI != ''">
+	<xsl:if test="$scheme != '' or $schemeURI != ''">
           <xsl:choose>
             <xsl:when test="$scheme != '' and $schemeURI != ''">
               <dct:conformsTo>
