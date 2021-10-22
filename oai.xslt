@@ -124,6 +124,8 @@
   =======================
   
 -->
+
+<xsl:param name="catalogId"></xsl:param>
   
 <!-- URI and URN of the spatial reference system (SRS) used in the bounding box.
      The default SRS is CRS84. If a different SRS is used, also parameter 
@@ -478,7 +480,7 @@
  
  -->
 
-
+    <dct:isPartOf rdf:resource="https://f2ds.eosc-pillar.eu/catalog/{$catalogId}"/>
 <!-- Titles template -->
 
   <xsl:template name="Titles" match="*[local-name() = 'titles']/*[local-name() = 'title']">
@@ -1361,7 +1363,7 @@
 <!-- Dates template -->
 
   <xsl:template name="PublicationYear" match="*[local-name() = 'publicationYear']">
-    <dct:issued rdf:datatype="{$xsd}gYear">
+    <dct:issued rdf:datatype="{$xsd}dateTime">
       <xsl:value-of select="normalize-space(.)"/>
     </dct:issued>
   </xsl:template>
@@ -1370,16 +1372,16 @@
     <xsl:param name="date"/>
     <xsl:choose>
       <xsl:when test="string-length($date) = 4">
-        <xsl:text>gYear</xsl:text>
+        <xsl:text>dateTime</xsl:text>
       </xsl:when>
       <xsl:when test="string-length($date) = 10">
-        <xsl:text>date</xsl:text>
+        <xsl:text>dateTime</xsl:text>
       </xsl:when>
       <xsl:when test="string-length($date) &gt; 10">
         <xsl:text>dateTime</xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:text>date</xsl:text>
+        <xsl:text>dateTime</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
