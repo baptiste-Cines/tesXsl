@@ -638,6 +638,139 @@
       </xsl:apply-templates>
     </xsl:param>
 
+    <xsl:param name="Conformity">
+      <xsl:for-each select="gmd:dataQualityInfo/*/gmd:report/*/gmd:result/*/gmd:specification/gmd:CI_Citation">
+        <xsl:variable name="specUri" select="normalize-space(gmd:title/gmx:Anchor/@xlink:href)"/>
+        <xsl:variable name="specTitle">
+          <xsl:for-each select="gmd:title">
+<!--
+            <dct:title xml:lang="{$MetadataLanguage}"><xsl:value-of select="normalize-space(gco:CharacterString)"/></dct:title>
+-->
+            <dct:title xml:lang="{$MetadataLanguage}">
+              <xsl:value-of select="normalize-space(*[self::gco:CharacterString|self::gmx:Anchor])"/>
+            </dct:title>
+            <xsl:call-template name="LocalisedString">
+              <xsl:with-param name="term">dct:title</xsl:with-param>
+            </xsl:call-template>
+          </xsl:for-each>
+        </xsl:variable>
+        <xsl:variable name="specinfo">
+<!--
+          <dct:title xml:lang="{$MetadataLanguage}">
+            <xsl:value-of select="gmd:title/gco:CharacterString"/>
+          </dct:title>
+-->
+          <xsl:copy-of select="$specTitle"/>
+          <xsl:apply-templates select="gmd:date/gmd:CI_Date"/>
+        </xsl:variable>
+        <xsl:variable name="degree">
+          <xsl:choose>
+            <xsl:when test="../../gmd:pass/gco:Boolean = 'true'">
+              <xsl:value-of select="concat($DegreeOfConformityCodelistUri,'/conformant')"/>
+            </xsl:when>
+            <xsl:when test="../../gmd:pass/gco:Boolean = 'false'">
+              <xsl:value-of select="concat($DegreeOfConformityCodelistUri,'/notConformant')"/>
+            </xsl:when>
+            <xsl:otherwise>
+<!--
+            <xsl:when test="../../gmd:pass/gco:Boolean = ''">
+-->
+              <xsl:value-of select="concat($DegreeOfConformityCodelistUri,'/notEvaluated')"/>
+<!--
+            </xsl:when>
+-->
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+<!--
+        <xsl:variable name="explanation">
+          <xsl:value-of select="../../gmd:explanation/gco:CharacterString"/>
+        </xsl:variable>
+-->
+        <xsl:variable name="explanation">
+          <xsl:for-each select="../../gmd:explanation">
+            <dct:description xml:lang="{$MetadataLanguage}">
+              <xsl:value-of select="normalize-space(gco:CharacterString)"/>
+            </dct:description>
+            <xsl:call-template name="LocalisedString">
+              <xsl:with-param name="term">dct:description</xsl:with-param>
+            </xsl:call-template>
+          </xsl:for-each>
+        </xsl:variable>
+        <xsl:variable name="Activity">
+          <prov:Activity>
+            <xsl:if test="$ResourceUri != ''">
+              <prov:used>
+                <prov:Entity rdf:about="{$ResourceUri}"/>
+              </prov:used>
+            </xsl:if>
+            <prov:qualifiedAssociation rdf:parseType="Resource">
+              <rdf:type rdf:resource="{$prov}Association"/>
+              <prov:hadPlan rdf:parseType="Resource">
+                <rdf:type rdf:resource="{$prov}Plan"/>
+                <xsl:choose>
+                  <xsl:when test="$specUri != ''">
+                    <prov:wasDerivedFrom>
+                      <prov:Entity rdf:about="{$specUri}"/>
+                    </prov:wasDerivedFrom>
+<!--
+                    <prov:wasDerivedFrom>
+                      <rdf:Description rdf:about="{$specUri}">
+                        <xsl:copy-of select="$specinfo"/>
+                      </rdf:Description>
+                    </prov:wasDerivedFrom>
+-->
+                  </xsl:when>
+                  <xsl:when test="../@xlink:href and ../@xlink:href != ''">
+                    <prov:wasDerivedFrom>
+                      <prov:Entity rdf:about="{../@xlink:href}"/>
+                    </prov:wasDerivedFrom>
+<!--
+                    <prov:wasDerivedFrom>
+                      <rdf:Description rdf:about="{../@xlink:href}">
+                        <xsl:copy-of select="$specinfo"/>
+                      </rdf:Description>
+                    </prov:wasDerivedFrom>
+-->
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <prov:wasDerivedFrom rdf:parseType="Resource">
+                      <rdf:type rdf:resource="{$prov}Entity"/>
+                      <xsl:copy-of select="$specinfo"/>
+                    </prov:wasDerivedFrom>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </prov:hadPlan>
+            </prov:qualifiedAssociation>
+            <prov:generated rdf:parseType="Resource">
+              <rdf:type rdf:resource="{$prov}Entity"/>
+              <dct:type rdf:resource="{$degree}"/>
+<!--
+              <xsl:if test="$explanation and $explanation != ''">
+                <dct:description xml:lang="{$MetadataLanguage}"><xsl:value-of select="$explanation"/></dct:description>
+              </xsl:if>
+-->
+              <xsl:copy-of select="$explanation"/>
+            </prov:generated>
+          </prov:Activity>
+        </xsl:variable>
+<!--
+        <xsl:choose>
+          <xsl:when test="$ResourceUri != ''">
+            <xsl:copy-of select="$Activity"/>
+          </xsl:when>
+          <xsl:otherwise>
+-->
+            <prov:wasUsedBy>
+              <xsl:copy-of select="$Activity"/>
+            </prov:wasUsedBy>
+<!--
+          </xsl:otherwise>
+        </xsl:choose>
+-->
+      </xsl:for-each>
+    </xsl:param>
+
     <dct:isPartOf rdf:resource="https://f2ds.eosc-pillar.eu/catalog/{$catalogId}"/>
     
 
