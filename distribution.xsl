@@ -362,6 +362,139 @@
 
   <xsl:param name="inspire-mt" select="concat($inspire,'media-types/')"/>
 
+  <!-- Metadata character encoding (only for the extended profile) -->
+
+    <xsl:param name="MetadataCharacterEncoding">
+      <xsl:apply-templates select="gmd:characterSet/gmd:MD_CharacterSetCode"/>
+    </xsl:param>
+
+    <xsl:param name="ResourceCharacterEncoding">
+      <xsl:for-each select="gmd:identificationInfo/gmd:MD_DataIdentification">
+        <xsl:apply-templates select="gmd:characterSet/gmd:MD_CharacterSetCode"/>
+      </xsl:for-each>
+    </xsl:param>
+
+<!-- Metadata description (metadata on metadata) -->
+
+    <xsl:param name="MetadataDescription">
+      <rdf:type rdf:resource="{$dcat}CatalogRecord"/>
+      <xsl:if test="$ResourceUri != ''">
+        <foaf:primaryTopic rdf:resource="{$ResourceUri}"/>
+      </xsl:if>
+<!-- Metadata standard -->
+      <dct:conformsTo rdf:resource="{$selected-profile}"/>
+        
+<!-- Metadata language -->
+      <xsl:if test="$ormlang != ''">
+        <dct:language>
+          <dct:LinguisticSystem rdf:about="{concat($oplang,translate($ormlang,$lowercase,$uppercase))}"/>
+        </dct:language>
+      </xsl:if>
+<!-- Metadata date -->
+      <xsl:if test="$MetadataDate != ''">
+        <xsl:variable name="data-type">
+          <xsl:call-template name="DateDataType">
+            <xsl:with-param name="date" select="$MetadataDate"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <dct:modified rdf:datatype="{$xsd}{$data-type}">
+          <xsl:value-of select="$MetadataDate"/>
+        </dct:modified>
+      </xsl:if>
+<!-- Metadata point of contact: only for the extended profile -->
+      <xsl:if test="$profile = $extended">
+        <xsl:for-each select="gmd:contact">
+          <xsl:apply-templates select="gmd:CI_ResponsibleParty">
+            <xsl:with-param name="MetadataLanguage" select="$MetadataLanguage"/>
+            <xsl:with-param name="ResourceType" select="$ResourceType"/>
+          </xsl:apply-templates>
+        </xsl:for-each>
+<!-- Old version
+        <xsl:apply-templates select="gmd:contact/gmd:CI_ResponsibleParty">
+          <xsl:with-param name="MetadataLanguage" select="$MetadataLanguage"/>
+        </xsl:apply-templates>
+-->
+      </xsl:if>
+<!-- Metadata file identifier (tentative): only for the extended profile -->
+      <xsl:if test="$profile = $extended">
+        <xsl:for-each select="gmd:fileIdentifier/gco:CharacterString">
+          <dct:identifier rdf:datatype="{$xsd}string"><xsl:value-of select="."/></dct:identifier>
+        </xsl:for-each>
+      </xsl:if>
+<!-- Metadata standard (tentative): only for the extended profile -->
+<!-- Mapping moved to core profile for compliance with DCAT-AP 2 -->
+<!--
+      <xsl:if test="$profile = $extended">
+-->
+      <xsl:variable name="MetadataStandardURI" select="gmd:metadataStandardName/gmx:Anchor/@xlink:href"/>
+<!--
+      <xsl:variable name="MetadataStandardName" select="gmd:metadataStandardName/*[self::gco:CharacterString|self::gmx:Anchor]"/>
+-->
+      <xsl:variable name="MetadataStandardName">
+        <xsl:for-each select="gmd:metadataStandardName">
+          <dct:title xml:lang="{$MetadataLanguage}">
+            <xsl:value-of select="normalize-space(*[self::gco:CharacterString|self::gmx:Anchor])"/>
+          </dct:title>
+          <xsl:call-template name="LocalisedString">
+            <xsl:with-param name="term">dct:title</xsl:with-param>
+          </xsl:call-template>
+        </xsl:for-each>
+      </xsl:variable>
+      <xsl:variable name="MetadataStandardVersion" select="gmd:metadataStandardVersion/gco:CharacterString"/>
+        <xsl:if test="$MetadataCharacterEncoding != '' or $MetadataStandardURI != '' or $MetadataStandardName != ''">
+          <dct:source rdf:parseType="Resource">
+            <rdf:type rdf:resource="{$dcat}CatalogRecord"/>
+<!-- Metadata date -->
+            <xsl:if test="$MetadataDate != ''">
+              <dct:modified rdf:datatype="{$xsd}date">
+                <xsl:value-of select="$MetadataDate"/>
+              </dct:modified>
+            </xsl:if>
+            <xsl:if test="$MetadataCharacterEncoding != ''">
+<!-- Metadata character encoding (tentative): only for the extended profile -->
+              <xsl:copy-of select="$MetadataCharacterEncoding"/>
+            </xsl:if>
+            <xsl:choose>
+              <xsl:when test="$MetadataStandardURI != ''">
+<!-- Metadata standard, denoted by a URI -->
+                <dct:conformsTo rdf:resource="{$selected-profile}"/>
+              </xsl:when>
+              <xsl:when test="$MetadataStandardName != ''">
+                <dct:conformsTo rdf:resource="{$dct}Standard"/>
+                  
+<!-- Metadata standard name -->
+<!--
+                  <dct:title xml:lang="{$MetadataLanguage}"><xsl:value-of select="$MetadataStandardName"/></dct:title>
+-->
+               
+              </xsl:when>
+            </xsl:choose>
+          </dct:source>
+        </xsl:if>
+<!-- Old version:
+        <xsl:for-each select="gmd:metadataStandardName/gco:CharacterString">
+          <xsl:if test="text() != '' or ../../gmd:metadataStandardVersion/gco:CharacterString/text() != ''">
+            <dct:source rdf:parseType="Resource">
+              <xsl:if test="$MetadataCharacterEncoding != ''">
+                <xsl:copy-of select="$MetadataCharacterEncoding"/>
+              </xsl:if>
+              <dct:conformsTo rdf:parseType="Resource">
+                <xsl:if test="text() != ''">
+                  <dct:title xml:lang="{$MetadataLanguage}"><xsl:value-of select="."/></dct:title>
+                </xsl:if>
+                <xsl:if test="../../gmd:metadataStandardName/gco:CharacterString/text() != ''">
+                  <owl:versionInfo xml:lang="{$MetadataLanguage}"><xsl:value-of select="../../gmd:metadataStandardVersion/gco:CharacterString"/></owl:versionInfo>
+                </xsl:if>
+              </dct:conformsTo>
+            </dct:source>
+          </xsl:if>
+        </xsl:for-each>
+-->
+<!--
+      </xsl:if>
+-->
+    </xsl:param>
+
 <!--
 
   Master template
