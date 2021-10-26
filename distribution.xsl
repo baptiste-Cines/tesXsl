@@ -384,17 +384,7 @@
 
   <xsl:template match="gmd:MD_Metadata|//gmd:MD_Metadata">
 
-<!--
 
-  Parameters to create HTTP URIs for the resource and the corresponding metadata record
-  =====================================================================================
-
-  These parameters must be customised depending on the strategy used to assign HTTP URIs.
-
-  The default rule implies that HTTP URIs are specified for the metadata file identifier
-  (metadata URI) and the resource identifier (resource URI).
-
--->
 
   <xsl:param name="ResourceUri">
     <xsl:variable name="rURI" select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/*/gmd:code/gco:CharacterString"/>
@@ -410,14 +400,7 @@
     </xsl:if>
   </xsl:param>
 
-<!--
 
-  Other parameters
-  ================
-
--->
-
-<!-- Metadata language: corresponding Alpha-2 codes -->
 
     <xsl:param name="ormlang">
       <xsl:choose>
@@ -512,8 +495,6 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:param>
-
-<!-- Resource language: corresponding Alpha-2 codes -->
 
     <xsl:param name="orrlang">
       <xsl:choose>
@@ -852,25 +833,48 @@
           </xsl:choose>
         </xsl:for-each>
       </xsl:for-each>
+</xsl:template>
 
+
+
+
+
+
+
+
+<<xsl:template name="SpatialResolution" match="gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution">
+<!-- dcat:granularity is deprecated -->
 <!--
-
-  Templates for specific metadata elements
-  ========================================
-
+    <xsl:for-each select="gmd:distance/gco:Distance">
+      <dcat:granularity rdf:datatype="{$xsd}string"><xsl:value-of select="."/> <xsl:value-of select="@uom"/></dcat:granularity>
+    </xsl:for-each>
+    <xsl:for-each select="gmd:equivalentScale/gmd:MD_RepresentativeFraction/gmd:denominator">
+      <dcat:granularity rdf:datatype="{$xsd}string">1/<xsl:value-of select="gco:Integer"/></dcat:granularity>
+    </xsl:for-each>
 -->
-
-
-
-
-
-
-
-
-
-
-<!-- Mapping moved to core profile for compliance with DCAT-AP 2 -->
-<!-- Mapping added for compliance with DCAT-AP 2 -->
+    <xsl:for-each select="gmd:distance/gco:Distance">
+      <xsl:variable name="UoM">
+        <xsl:choose>
+          <xsl:when test="@uom = 'EPSG::9001' or @uom = 'urn:ogc:def:uom:EPSG::9001' or @uom = 'urn:ogc:def:uom:UCUM::m' or @uom = 'urn:ogc:def:uom:OGC::m'">
+            <xsl:value-of select="concat('m',' (',@uom,')')"/>
+          </xsl:when>
+          <xsl:when test="@uom = 'EPSG::9002' or @uom = 'urn:ogc:def:uom:EPSG::9002' or @uom = 'urn:ogc:def:uom:UCUM::[ft_i]' or @uom = 'urn:ogc:def:uom:OGC::[ft_i]'">
+            <xsl:value-of select="concat('ft',' (',@uom,')')"/>
+          </xsl:when>
+          <xsl:when test="starts-with(@uom, 'http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/uom/ML_gmxUom.xml#')">
+            <xsl:value-of select="concat(substring-after(@uom, 'http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/uom/ML_gmxUom.xml#'),' (',@uom,')')"/>
+          </xsl:when>
+<!-- To be completed -->
+          <xsl:otherwise>
+            <xsl:value-of select="normalize-space(@uom)"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+<!--
+      <xsl:if test="$profile = $extended">
+        <rdfs:comment xml:lang="en">Spatial resolution (distance): <xsl:value-of select="."/>&#160;<xsl:value-of select="$UoM"/></rdfs:comment>
+      </xsl:if>
+-->
       <xsl:choose>
         <xsl:when test="($UoM = 'm' or starts-with($UoM, 'm ')) and number(.) = number(.)">
           <dcat:spatialResolutionInMeters rdf:datatype="{$xsd}decimal">
@@ -1641,25 +1645,6 @@
     <adms:representationTechnique rdf:resource="{$SpatialRepresentationTypeCodelistUri}/{@codeListValue}"/>
   </xsl:template>
 
-<!-- Multilingual text -->
-
-  <xsl:template name="LocalisedString">
-    <!--<xsl:param name="term"/>
-    <xsl:for-each select="gmd:PT_FreeText/*/gmd:LocalisedCharacterString">
-      <xsl:variable name="value" select="normalize-space(.)"/>
-      <xsl:variable name="langs">
-        <xsl:call-template name="Alpha3-to-Alpha2">
-          <xsl:with-param name="lang" select="translate(translate(@locale, $uppercase, $lowercase), '#', '')"/>
-        </xsl:call-template>
-      </xsl:variable>
-      <xsl:if test="$value != ''">
-        <xsl:element name="{$term}">
-          <xsl:attribute name="xml:lang"><xsl:value-of select="$langs"/></xsl:attribute>
-          <xsl:value-of select="$value"/>
-        </xsl:element>
-      </xsl:if>
-    </xsl:for-each>-->
-  </xsl:template>
 
   <xsl:template name="Alpha3-to-Alpha2">
     <xsl:param name="lang"/>
