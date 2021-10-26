@@ -740,7 +740,7 @@
 -->
             <xsl:copy-of select="$Title"/>
             <xsl:copy-of select="$Description"/>
-            <xsl:copy-of select="$Version">
+            <xsl:copy-of select="$Version"/>
           </xsl:variable>
 
           <xsl:variable name="TitleOrDescriptionOrPlaceholder">
