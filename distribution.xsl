@@ -710,7 +710,7 @@
           <xsl:variable name="Version">
             <xsl:for-each select="gmd:version">
                 <dct:hasVersion xml:lang="{$MetadataLanguage}">
-                    <xsl:value-of select="normalize-space(*)">
+                    <xsl:value-of select="normalize-space(*)"/>
                 </dct:hasVersion>
                 <xsl:call-template name="LocalisedString">
                 <xsl:with-param name="term">dct:hasVersion</xsl:with-param>
