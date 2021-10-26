@@ -1521,6 +1521,24 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template name="LocalisedString">
+    <!--<xsl:param name="term"/>
+    <xsl:for-each select="gmd:PT_FreeText/*/gmd:LocalisedCharacterString">
+      <xsl:variable name="value" select="normalize-space(.)"/>
+      <xsl:variable name="langs">
+        <xsl:call-template name="Alpha3-to-Alpha2">
+          <xsl:with-param name="lang" select="translate(translate(@locale, $uppercase, $lowercase), '#', '')"/>
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:if test="$value != ''">
+        <xsl:element name="{$term}">
+          <xsl:attribute name="xml:lang"><xsl:value-of select="$langs"/></xsl:attribute>
+          <xsl:value-of select="$value"/>
+        </xsl:element>
+      </xsl:if>
+    </xsl:for-each>-->
+  </xsl:template>
+
 <!-- Maintenance information -->
 
   <xsl:template name="MaintenanceInformation" match="gmd:MD_MaintenanceInformation/gmd:maintenanceAndUpdateFrequency/gmd:MD_MaintenanceFrequencyCode">
