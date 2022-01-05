@@ -1948,7 +1948,7 @@
         </prov:entityOfInfluence>
       </xsl:when>
 -->
-      <xsl:when test="$role = 'publisher' and ($ResourceType != 'service' or $profile = $extended)">
+      <xsl:when test="$role = 'publisher'">
         <dct:publisher>
           <xsl:copy-of select="$ROInfo"/>
         </dct:publisher>
@@ -3231,12 +3231,12 @@
     <xsl:param name="media-type">
       <xsl:choose>
         <xsl:when test="$format-uri != ''">
-          <dct:MediaType rdf:about="{$format-uri}"/>
+          <dcat:mediaType rdf:about="{$format-uri}"/>
         </xsl:when>
         <xsl:when test="$format-label != ''">
-          <dct:MediaType>
+          <dcat:mediaType>
             <rdfs:label><xsl:value-of select="$format-label"/></rdfs:label>
-          </dct:MediaType>
+          </dcat:mediaType>
         </xsl:when>
       </xsl:choose>
     </xsl:param>
