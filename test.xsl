@@ -1966,13 +1966,7 @@
         </dct:publisher>
       </xsl:when>
 
-      <xsl:when test="$role != 'publisher'">
-        <dct:publisher>
-          <foaf:agent>
-          <foaf:name>undefined</foaf:name>
-          </foaf:agent>
-        </dct:publisher>
-      </xsl:when>
+     
 <!-- Mapping moved to core profile for compliance with DCAT-AP 2 -->
       <xsl:when test="$role = 'author' and ($ResourceType != 'service' or $profile = $extended)">
         <dct:creator>
