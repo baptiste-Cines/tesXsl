@@ -1383,9 +1383,9 @@
 <!-- ?? Should foaf:page be detailed with title, description, etc.? -->
                   <xsl:for-each select="gmd:linkage/gmd:URL">
                   <xsl:choose>
-                    <xsl:when test="contains(., "$quot;")">
+                    <xsl:when test="contains(., '$quot;')">
                     <foaf:page>
-                        <foaf:Document rdf:about="{substring-before(., "$quot;")}">
+                        <foaf:Document rdf:about="{substring-before(., '$quot;')}">
                           <xsl:copy-of select="$TitleAndDescription"/>
                         </foaf:Document>
                       </foaf:page>
