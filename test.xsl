@@ -1968,8 +1968,9 @@
 
       <xsl:when test="$role != 'publisher'">
         <dct:publisher>
-          <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Agent"/>
+          <foaf:agent>
           <foaf:name>undefined</foaf:name>
+          </foaf:agent>
         </dct:publisher>
       </xsl:when>
 <!-- Mapping moved to core profile for compliance with DCAT-AP 2 -->
