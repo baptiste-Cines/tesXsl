@@ -1397,7 +1397,7 @@
                         </foaf:Document>
                       </foaf:page>
                     </xsl:otherwise>
-                  <xsl:choose>
+                  </xsl:choose>
                     
                   </xsl:for-each>
                 </xsl:when>
