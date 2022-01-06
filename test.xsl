@@ -1405,24 +1405,24 @@
                 <xsl:otherwise>
                   <xsl:for-each select="gmd:linkage/gmd:URL">
 
-                    <xsl:choose>
-                      <xsl:when test="contains(., '$quot;')">
-                      <foaf:page>
-                          <foaf:Document rdf:about="{substring-before(., '$quot;')}">
-                            <xsl:copy-of select="$TitleAndDescription"/>
-                          </foaf:Document>
-                        </foaf:page>
-                      </xsl:when>
-                      <xsl:otherwise>
-                      <foaf:page>
-                          <foaf:Document rdf:about="{.}">
-                            <xsl:copy-of select="$TitleAndDescription"/>
-                          </foaf:Document>
-                        </foaf:page>
-                      </xsl:otherwise>
-                    </xsl:choose>
+<xsl:choose>
+                    <xsl:when test="contains(gmd:linkage/gmd:URL, '$quot;')">
+                    <dcat:landingPage>
+                        <foaf:Document rdf:about="{substring-before(gmd:linkage/gmd:URL, '$quot;')}">
+                          <xsl:copy-of select="$TitleAndDescription"/>
+                        </foaf:Document>
+                      </dcat:landingPage>
+                    </xsl:when>
+                    <xsl:otherwise>
+                    <dcat:landingPage>
+                      <foaf:Document rdf:about="{normalize-space(.)}">
+                        <xsl:copy-of select="$TitleAndDescription"/>
+                      </foaf:Document>
+                    </dcat:landingPage>
+                    </xsl:otherwise>
+                  </xsl:choose>
 
-                 
+                    
                   </xsl:for-each>
                 </xsl:otherwise>
               </xsl:choose>
