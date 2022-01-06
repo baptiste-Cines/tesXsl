@@ -1390,7 +1390,7 @@
                   </xsl:for-each>
                 </xsl:when>
 <!-- ?? Should dcat:landingPage be detailed with title, description, etc.? -->
-                <!--<xsl:otherwise>
+                <xsl:otherwise>
                   <xsl:for-each select="gmd:linkage/gmd:URL">
                     <dcat:landingPage>
                       <foaf:Document rdf:about="{.}">
@@ -1398,7 +1398,7 @@
                       </foaf:Document>
                     </dcat:landingPage>
                   </xsl:for-each>
-                </xsl:otherwise>-->
+                </xsl:otherwise>
               </xsl:choose>
             </xsl:when>
           </xsl:choose>
