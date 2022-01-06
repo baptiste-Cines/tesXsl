@@ -3238,7 +3238,7 @@
     <xsl:param name="media-type">
       <xsl:choose>
         <xsl:when test="$format-uri != ''">
-          <dcat:mediaType rdf:about="{$format-uri}"/>
+          <dcat:mediaType rdf:resource="{$format-uri}"/>
         </xsl:when>
         <xsl:when test="$format-label != ''">
           <dcat:mediaType>
