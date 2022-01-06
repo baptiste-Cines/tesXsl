@@ -1384,7 +1384,7 @@
                   <xsl:for-each select="gmd:linkage/gmd:URL">
                     <foaf:page>
                       <foaf:Document rdf:about="{.}">
-                        <xsl:copy-of select="substring-before(substring-after($TitleAndDescription, concat(., &quot;)), &quot;)"/>
+                        <xsl:copy-of select="substring-before(substring-after($TitleAndDescription, concat(., "&quot;")), &quot;)"/>
                       </foaf:Document>
                     </foaf:page>
                   </xsl:for-each>
