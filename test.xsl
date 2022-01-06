@@ -3247,9 +3247,9 @@
         </dcat:mediaType>
       </xsl:when>
       <xsl:otherwise>
-        <dct:format>
+        
           <xsl:copy-of select="$media-type"/>
-        </dct:format>
+        
       </xsl:otherwise>
     </xsl:choose>
 <!--
