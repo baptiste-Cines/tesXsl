@@ -1406,10 +1406,10 @@
                 <xsl:otherwise>
                   <xsl:for-each select="gmd:linkage/gmd:URL">
 
-<xsl:choose>
-                    <xsl:when test="contains(gmd:linkage/gmd:URL, '&apos;')">
+                  <xsl:choose>
+                    <xsl:when test='contains(gmd:linkage/gmd:URL, "&apos;")'>
                     <dcat:landingPage>
-                        <foaf:Document rdf:about="{substring-before(gmd:linkage/gmd:URL, '&apos;')}">
+                        <foaf:Document rdf:about='{substring-before(gmd:linkage/gmd:URL, "&apos;")}'>
                           <xsl:copy-of select="$TitleAndDescription"/>
                         </foaf:Document>
                       </dcat:landingPage>
