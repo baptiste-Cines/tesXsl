@@ -201,7 +201,6 @@
 
   <xsl:variable name="lowercase">abcdefghijklmnopqrstuvwxyz</xsl:variable>
   <xsl:variable name="uppercase">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
-  <xsl:variable name="quote">"</xsl:variable>
 
 <!-- URIs, URNs and names for spatial reference system registers. -->
 
@@ -1090,8 +1089,19 @@
         <xsl:if test="$InspireResourceType != ''">
           <dct:type rdf:resource="{$ResourceTypeCodelistUri}/{$ResourceType}"/>
         </xsl:if>
+
+		 <dct:publisher>
+        <foaf:Agent>
+          
+              <foaf:name>
+                <xsl:value-of select="gmd:contact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString"/>
+              </foaf:name>
+            
+        </foaf:Agent>
+      </dct:publisher>
 <!--
       </xsl:if>
+	  
 -->
     <dct:isPartOf rdf:resource="https://f2ds.eosc-pillar.eu/catalog/{$catalogId}"/>
     <xsl:copy-of select="$ResourceVersion"/>
@@ -1383,48 +1393,38 @@
                 <xsl:when test="$function = 'information' or $function = 'search'">
 <!-- ?? Should foaf:page be detailed with title, description, etc.? -->
                   <xsl:for-each select="gmd:linkage/gmd:URL">
-                  <xsl:choose>
-                    <xsl:when test="contains(., '$quot;')">
                     <foaf:page>
-                        <foaf:Document rdf:about="{substring-before(., '$quot;')}">
-                          <xsl:copy-of select="$TitleAndDescription"/>
-                        </foaf:Document>
-                      </foaf:page>
-                    </xsl:when>
-                    <xsl:otherwise>
-                    <foaf:page>
-                        <foaf:Document rdf:about="{.}">
-                          <xsl:copy-of select="$TitleAndDescription"/>
-                        </foaf:Document>
-                      </foaf:page>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                    
+                      <foaf:Document rdf:about="{.}">
+                        <xsl:copy-of select="$TitleAndDescription"/>
+                      </foaf:Document>
+                    </foaf:page>
                   </xsl:for-each>
                 </xsl:when>
 <!-- ?? Should dcat:landingPage be detailed with title, description, etc.? -->
                 <xsl:otherwise>
-                  <xsl:for-each select="gmd:linkage/gmd:URL">
+                 <xsl:for-each select="gmd:linkage/gmd:URL">
+										<xsl:variable name="apos">&quot;</xsl:variable>
 
-                  <xsl:choose>
-                    <xsl:when test="contains(gmd:linkage/gmd:URL, "&quot;")">
-                    <dcat:landingPage>
-                        <foaf:Document rdf:about="{substring-before(gmd:linkage/gmd:URL, "&quot;")}">
-                          <xsl:copy-of select="$TitleAndDescription"/>
-                        </foaf:Document>
-                      </dcat:landingPage>
-                    </xsl:when>
-                    <xsl:otherwise>
-                    <dcat:landingPage>
-                      <foaf:Document rdf:about="{.}">
-                        <xsl:copy-of select="$TitleAndDescription"/>
-                      </foaf:Document>
-                    </dcat:landingPage>
-                    </xsl:otherwise>
-                  </xsl:choose>
+										<xsl:choose>
+											<xsl:when test="contains(., $apos)">
+												<dcat:landingPage>
+													<foaf:Document
+														rdf:about="{substring-before(., $apos)}">
+														<xsl:copy-of select="$TitleAndDescription" />
+													</foaf:Document>
+												</dcat:landingPage>
+											</xsl:when>
+											<xsl:otherwise>
+												<dcat:landingPage>
+													<foaf:Document rdf:about="{.}">
+														<xsl:copy-of select="$TitleAndDescription" />
+													</foaf:Document>
+												</dcat:landingPage>
+											</xsl:otherwise>
+										</xsl:choose>
 
-                    
-                  </xsl:for-each>
+
+									</xsl:for-each>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:when>
@@ -1975,12 +1975,6 @@
         </prov:entityOfInfluence>
       </xsl:when>
 -->
-      <xsl:when test="$role = 'publisher'">
-        <dct:publisher>
-          <xsl:copy-of select="$ROInfo"/>
-        </dct:publisher>
-      </xsl:when>
-
      
 <!-- Mapping moved to core profile for compliance with DCAT-AP 2 -->
       <xsl:when test="$role = 'author' and ($ResourceType != 'service' or $profile = $extended)">
