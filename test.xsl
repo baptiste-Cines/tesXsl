@@ -201,6 +201,7 @@
 
   <xsl:variable name="lowercase">abcdefghijklmnopqrstuvwxyz</xsl:variable>
   <xsl:variable name="uppercase">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
+  <xsl:variable name="quote">"</xsl:variable>
 
 <!-- URIs, URNs and names for spatial reference system registers. -->
 
@@ -1406,16 +1407,16 @@
                   <xsl:for-each select="gmd:linkage/gmd:URL">
 
 <xsl:choose>
-                    <xsl:when test="contains(gmd:linkage/gmd:URL, '$quot;')">
+                    <xsl:when test="contains(gmd:linkage/gmd:URL, '&apos;')">
                     <dcat:landingPage>
-                        <foaf:Document rdf:about="{substring-before(gmd:linkage/gmd:URL, '$quot;')}">
+                        <foaf:Document rdf:about="{substring-before(gmd:linkage/gmd:URL, '&apos;')}">
                           <xsl:copy-of select="$TitleAndDescription"/>
                         </foaf:Document>
                       </dcat:landingPage>
                     </xsl:when>
                     <xsl:otherwise>
                     <dcat:landingPage>
-                      <foaf:Document rdf:about="{normalize-space(.)}">
+                      <foaf:Document rdf:about="{.}">
                         <xsl:copy-of select="$TitleAndDescription"/>
                       </foaf:Document>
                     </dcat:landingPage>
