@@ -2498,7 +2498,7 @@
     <dct:spatial rdf:parseType="Resource">
       <rdf:type rdf:resource="{$dct}Location"/>
 <!-- DEPRECATED: Mapping kept for backward compatibility with GeoDCAT-AP v1.* -->
-      <xsl:if test="$include-deprecated = 'yes'">
+      
 <!-- Recommended geometry encodings -->
         <locn:geometry rdf:datatype="{$gsp}wktLiteral"><xsl:value-of select="$WKTLiteral"/></locn:geometry>
         <locn:geometry rdf:datatype="{$gsp}gmlLiteral"><xsl:value-of select="$GMLLiteral"/></locn:geometry>
@@ -2510,18 +2510,12 @@
 <!--
         <locn:geometry rdf:datatype="{$dct}Box"><xsl:value-of select="$DCTBox"/></locn:geometry>
 -->
-      </xsl:if>
+      
 <!-- Mapping added for compliance with DCAT-AP 2 -->
 <!-- Recommended geometry encodings -->
-      <dcat:bbox rdf:datatype="{$gsp}wktLiteral"><xsl:value-of select="$WKTLiteral"/></dcat:bbox>
-      <dcat:bbox rdf:datatype="{$gsp}gmlLiteral"><xsl:value-of select="$GMLLiteral"/></dcat:bbox>
-<!-- Additional geometry encodings -->
-<!-- DEPRECATED: Mapping kept for backward compatibility with GeoDCAT-AP v1.* -->
-      <xsl:if test="$include-deprecated = 'yes'">
-        <dcat:bbox rdf:datatype="{$geojsonMediaTypeUri}"><xsl:value-of select="$GeoJSONLiteral"/></dcat:bbox>
-      </xsl:if>
+     
 <!-- Mapping added for compliance with GeoDCAT-AP 2 -->
-      <dcat:bbox rdf:datatype="{$gsp}geoJSONLiteral"><xsl:value-of select="$GeoJSONLiteral"/></dcat:bbox>
+      
     </dct:spatial>
 
   </xsl:template>
